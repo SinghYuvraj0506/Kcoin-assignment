@@ -6,7 +6,7 @@ import Currency from './Pages/Currency'
 function App() {
 
   return (
-    <div className='w-screen font-inter bg-[#EFF2F5] min-h-screen'>
+    <div className='w-screen font-inter bg-[#EFF2F5] h-max'>
       <Navbar/>
       <Currency/>
     </div>
