@@ -13,7 +13,9 @@ export default {
         "primary-blue":"#0052fe",
         "dark-green":"#0FBA83",
         "light-green":"#EBF9F4",
-        "grey-text":"#768396"
+        "grey-text":"#768396",
+        "light-red":"#FDF1ED",
+        "dark-red":"#E96A74"
       }
     },
   },

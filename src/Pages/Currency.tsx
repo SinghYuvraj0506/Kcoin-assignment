@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Graphs from "../Components/Graphs";
+import Graphs, { ImgGraphs } from "../Components/Graphs";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { RiTriangleFill } from "react-icons/ri";
 import { FaCircleInfo } from "react-icons/fa6";
@@ -8,7 +8,13 @@ import {
   OtherMetricsArray,
 } from "../Common/Constants/Constants";
 import NewsCards, { CheckCards, TeamCard } from "../Components/Cards";
-import { NewsCardProps, TeamCardProps } from "../Common/types/global";
+import {
+  NewsCardProps,
+  TeamCardProps,
+  trendingData,
+} from "../Common/types/global";
+import { useAxios } from "../Common/Hooks/useAxios";
+import { TbTriangleInvertedFilled } from "react-icons/tb";
 
 const NavigationMenu: React.FC = () => {
   return (
@@ -259,27 +265,32 @@ const TokenomicsSection: React.FC = () => {
 };
 
 const TeamSection: React.FC = () => {
-
   const [dummyTeam, setDummyTeam] = useState<TeamCardProps[]>([
     {
-      profile:"https://www.allprodad.com/wp-content/uploads/2021/03/05-12-21-happy-people.jpg",
-      name:"John Smith",
-      designation:"Software Developer",
-      about: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, dolorem! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequuntur perferendis consequatur cumque illum molestias nihil ducimus, aperiam corporis neque dolor."
+      profile:
+        "https://www.allprodad.com/wp-content/uploads/2021/03/05-12-21-happy-people.jpg",
+      name: "John Smith",
+      designation: "Software Developer",
+      about:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, dolorem! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequuntur perferendis consequatur cumque illum molestias nihil ducimus, aperiam corporis neque dolor.",
     },
     {
-      profile:"https://static.independent.co.uk/s3fs-public/thumbnails/image/2015/06/06/15/Chris-Pratt.jpg",
-      name:"Chris Hemsworth",
-      designation:"Son of God",
-      about: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, dolorem! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequuntur perferendis consequatur cumque illum molestias nihil ducimus, aperiam corporis neque dolor."
+      profile:
+        "https://static.independent.co.uk/s3fs-public/thumbnails/image/2015/06/06/15/Chris-Pratt.jpg",
+      name: "Chris Hemsworth",
+      designation: "Son of God",
+      about:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, dolorem! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequuntur perferendis consequatur cumque illum molestias nihil ducimus, aperiam corporis neque dolor.",
     },
     {
-      profile:"https://www.discoverwalks.com/blog/wp-content/uploads/2023/03/michael_b._jordan_cannes_2018.jpg",
-      name:"Chris Evans",
-      designation:"Founder",
-      about: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, dolorem! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequuntur perferendis consequatur cumque illum molestias nihil ducimus, aperiam corporis neque dolor.Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, dolorem! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequuntur perferendis consequatur cumque illum molestias nihil ducimus, aperiam corporis neque dolor.Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, dolorem! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequuntur perferendis consequatur cumque"
+      profile:
+        "https://www.discoverwalks.com/blog/wp-content/uploads/2023/03/michael_b._jordan_cannes_2018.jpg",
+      name: "Chris Evans",
+      designation: "Founder",
+      about:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, dolorem! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequuntur perferendis consequatur cumque illum molestias nihil ducimus, aperiam corporis neque dolor.Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, dolorem! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequuntur perferendis consequatur cumque illum molestias nihil ducimus, aperiam corporis neque dolor.Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, dolorem! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequuntur perferendis consequatur cumque",
     },
-  ])
+  ]);
 
   return (
     <div className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border">
@@ -291,78 +302,139 @@ const TeamSection: React.FC = () => {
       </p>
 
       <div className="flex flex-col items-center gap-5">
-        {dummyTeam?.map((e,i)=>{
-          return <TeamCard {...e} key={`team${i}`}/>
+        {dummyTeam?.map((e, i) => {
+          return <TeamCard {...e} key={`team${i}`} />;
         })}
       </div>
     </div>
   );
 };
 
-const Currency = () => {
+const LikeSection: React.FC<{ trendingCoinsData: trendingData[] }> = ({
+  trendingCoinsData,
+}) => {
   return (
-    <div className="w-full px-10 box-border flex justify-between gap-3 h-max pb-20 pt-5">
-      {/* Left Side Panel ----------------------------------- */}
-      <div className="min-w-[72%] w-[72%] flex flex-col gap-4 box-border">
-        <div className="w-full h-[60vh] mb-6">
-          <Graphs />
+    <div className="w-full bg-white px-10 py-8 box-border flex flex-col gap-8">
+      <section className="flex flex-col gap-2">
+        <h2 className="text-xl font-semibold">You May Also Like</h2>
+        <div className="flex items-center gap-5 w-full overflow-x-auto">
+          {trendingCoinsData?.map((e, i) => {
+            return (
+              <ImgGraphs
+                graphImg={e?.item?.data?.sparkline}
+                percentChange={e?.item?.data?.price_change_percentage_24h?.usd}
+                thumb={e?.item?.thumb}
+                price={e?.item?.data?.price}
+                symbol={e?.item?.symbol}
+                key={`trendingcoinz${i}`}
+              />
+            );
+          })}
+        </div>
+      </section>
+      <section className="flex flex-col gap-2">
+        <h2 className="text-xl font-semibold">Trending Coins</h2>
+        <div className="flex items-center gap-5 w-full overflow-x-auto">
+          {trendingCoinsData?.map((e, i) => {
+            return (
+              <ImgGraphs
+                graphImg={e?.item?.data?.sparkline}
+                percentChange={e?.item?.data?.price_change_percentage_24h?.usd}
+                thumb={e?.item?.thumb}
+                price={e?.item?.data?.price}
+                symbol={e?.item?.symbol}
+                key={`trendingcoinz${i}`}
+              />
+            );
+          })}
+        </div>
+      </section>
+    </div>
+  );
+};
+
+const Currency = () => {
+  const { data: trendingData } = useAxios(
+    "https://api.coingecko.com/api/v3/search/trending"
+  );
+
+  return (
+    <div className="w-full pt-5 flex flex-col gap-20">
+      <div className="w-full px-10 box-border flex justify-between gap-3 h-max relative">
+        {/* Left Side Panel ----------------------------------- */}
+        <div className="min-w-[72%] w-[72%] flex flex-col gap-4 box-border">
+          <div className="w-full h-[60vh] mb-6">
+            <Graphs />
+          </div>
+
+          {/* Other Metrics ------------------------------------- */}
+          <NavigationMenu />
+          <OverViewSection />
+          <SentimentSection />
+          <AboutSection coin="Bitcoin" />
+          <TokenomicsSection />
+          <TeamSection />
         </div>
 
-        {/* Other Metrics ------------------------------------- */}
-        <NavigationMenu />
-        <OverViewSection />
-        <SentimentSection />
-        <AboutSection coin="Bitcoin" />
-        <TokenomicsSection />
-        <TeamSection />
-      </div>
+        {/* Right Side Panel ----------------------------------- */}
+        <div className="w-full flex flex-col items-center gap-4 h-10">
+          {/* Get Started Section ----------------------- */}
+          <section className="bg-primary-blue flex flex-col items-center py-10 w-full text-center text-white gap-6 rounded-xl">
+            <h2 className="text-xl font-bold">
+              Get Started with KoinX <br /> for FREE
+            </h2>
 
-      {/* Right Side Panel ----------------------------------- */}
-      <div className="w-full flex flex-col items-center gap-4 h-10">
-        {/* Get Started Section ----------------------- */}
-        <section className="bg-primary-blue flex flex-col items-center py-10 w-full text-center text-white gap-6 rounded-xl">
-          <h2 className="text-xl font-bold">
-            Get Started with KoinX <br /> for FREE
-          </h2>
+            <p className="text-xs">
+              With our range of features that you can equip for <br /> free,
+              KoinX allows you to be more educated and <br /> aware of your tax
+              reports.
+            </p>
 
-          <p className="text-xs">
-            With our range of features that you can equip for <br /> free, KoinX
-            allows you to be more educated and <br /> aware of your tax reports.
-          </p>
+            <img src="/ilus1.webp" alt="" className="w-40" />
 
-          <img src="/ilus1.webp" alt="" className="w-40" />
-
-          <button className="flex items-center gap-2 font-medium bg-white rounded-lg py-2 px-5 text-black text-sm">
-            Get Started for FREE <IoIosArrowRoundForward />
-          </button>
-        </section>
-
-        {/* Trending Coins -------------------------------------- */}
-        <div className="w-full bg-white rounded-xl flex flex-col gap-5 px-5 py-5 box-border">
-          <h2 className="text-xl font-semibold">Trending Coins (24h)</h2>
-
-          <section className="flex flex-col gap-4">
-            <div className="w-full flex items-center justify-between">
-              <span className="text-sm ">Etherum(Eth)</span>
-              <div className="bg-[#ebf9f4] text-[#0fba83] flex items-center justify-center gap-2 px-3 rounded-sm">
-                <RiTriangleFill color="#0fba83" /> 8.21%
-              </div>
-            </div>
-            <div className="w-full flex items-center justify-between">
-              <span className="text-sm ">Etherum(Eth)</span>
-              <div className="bg-[#ebf9f4] text-[#0fba83] flex items-center justify-center gap-2 px-3 rounded-sm">
-                <RiTriangleFill color="#0fba83" /> 8.21%
-              </div>
-            </div>
-            <div className="w-full flex items-center justify-between">
-              <span className="text-sm ">Etherum(Eth)</span>
-              <div className="bg-[#ebf9f4] text-[#0fba83] flex items-center justify-center gap-2 px-3 rounded-sm">
-                <RiTriangleFill color="#0fba83" /> 8.21%
-              </div>
-            </div>
+            <button className="flex items-center gap-2 font-medium bg-white rounded-lg py-2 px-5 text-black text-sm">
+              Get Started for FREE <IoIosArrowRoundForward />
+            </button>
           </section>
+
+          {/* Trending Coins -------------------------------------- */}
+          <div className="w-full bg-white rounded-xl flex flex-col gap-5 px-5 py-5 box-border">
+            <h2 className="text-xl font-semibold">Trending Coins (24h)</h2>
+
+            <section className="flex flex-col gap-5">
+              {trendingData?.coins?.slice(0, 3)?.map((e: trendingData) => {
+                return (
+                  <div className="w-full flex items-center justify-between">
+                    <span className="text-sm flex items-center gap-2">
+                    <img src={e?.item?.thumb} alt="" className="w-5"/>
+                      {e?.item?.name} ({e?.item?.symbol})
+                    </span>
+                    <div
+                      className={`${
+                        parseInt(
+                          e?.item?.data?.price_change_percentage_24h?.usd
+                        ) < 0
+                          ? "bg-light-red text-dark-red"
+                          : "bg-light-green text-dark-green"
+                      } flex items-center justify-center gap-2 px-3 py-1 rounded-sm text-sm`}
+                    >
+                      {parseInt(
+                          e?.item?.data?.price_change_percentage_24h?.usd
+                        ) > 0 ? <RiTriangleFill /> : <TbTriangleInvertedFilled />}{" "}
+                      {parseInt(
+                        e?.item?.data?.price_change_percentage_24h?.usd
+                      ).toFixed(2) + "%"}
+                    </div>
+                  </div>
+                );
+              })}
+            </section>
+          </div>
         </div>
       </div>
+
+      {/* You Like Section ----------------------- */}
+      <LikeSection trendingCoinsData={trendingData?.coins} />
     </div>
   );
 };

@@ -58,6 +58,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({
   );
 };
 
+
 const NewsCards: React.FC<NewsCardProps> = ({
   headline,
   desc,
