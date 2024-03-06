@@ -16,6 +16,47 @@ import {
 import { useAxios } from "../Common/Hooks/useAxios";
 import { TbTriangleInvertedFilled } from "react-icons/tb";
 
+interface OverviewProps{
+  name:string,
+  market_cap_rank:number,
+  market_data:{
+    current_price:{
+      usd:number
+    },
+    ath:{
+      usd:number
+    },
+    atl:{
+      usd:number
+    },
+    ath_change_percentage:{
+      usd:number
+    },
+    atl_change_percentage:{
+      usd:number
+    },
+    ath_date:{
+      usd:string
+    },
+    atl_date:{
+      usd:string
+    },
+    market_cap:{
+      usd:number
+    },
+    total_volume:{
+      usd:number
+    },
+    market_cap_fdv_ratio:number,
+    high_24h:{
+      usd:number
+    },
+    low_24h:{
+      usd:number
+    }
+}
+}
+
 const NavigationMenu: React.FC = () => {
   return (
     <section className="w-full flex items-center gap-10 text-sm border-b border-[#dbdbdc]">
@@ -33,7 +74,7 @@ const NavigationMenu: React.FC = () => {
   );
 };
 
-const OverViewSection: React.FC = () => {
+const OverViewSection: React.FC<OverviewProps> = ({name,market_cap_rank,market_data}) => {
   return (
     <div className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border">
       <h2 className="text-xl font-semibold">Performance</h2>
@@ -42,21 +83,21 @@ const OverViewSection: React.FC = () => {
         <section className="flex w-full items-center justify-between">
           <div className="flex flex-col gap-1 items-center">
             <span className="text-grey-text text-xs">Today's Low</span>
-            <span className="text-sm">46900.00</span>
+            <span className="text-sm">---</span>
           </div>
           <div className="flex flex-col gap-1 items-center">
-            <span className="text-grey-text text-xs">Today's Low</span>
-            <span className="text-sm">46900.00</span>
+            <span className="text-grey-text text-xs">Today's High</span>
+            <span className="text-sm">---</span>
           </div>
         </section>
         <section className="flex w-full items-center justify-between">
           <div className="flex flex-col gap-1 items-center">
-            <span className="text-grey-text text-xs">Today's Low</span>
-            <span className="text-sm">46900.00</span>
+            <span className="text-grey-text text-xs">52W Low</span>
+            <span className="text-sm">---</span>
           </div>
           <div className="flex flex-col gap-1 items-center">
-            <span className="text-grey-text text-xs">Today's Low</span>
-            <span className="text-sm">46900.00</span>
+            <span className="text-grey-text text-xs">52W High</span>
+            <span className="text-sm">---</span>
           </div>
         </section>
       </div>
@@ -68,20 +109,20 @@ const OverViewSection: React.FC = () => {
 
         <section className="w-full grid grid-cols-2 gap-x-10 gap-y-4">
           {FundamentalsArray(
-            "Bitcoin",
-            16000,
-            1212,
+            name,
+            market_data?.current_price?.usd,
+            market_data?.low_24h?.usd,
+            market_data?.high_24h?.usd,
             12,
             12,
-            12,
-            12,
-            113,
+            market_data?.total_volume?.usd,
+            market_cap_rank,
+            market_data?.market_cap?.usd,
             4,
-            3,
-            43,
-            5,
-            634,
-            63,
+            market_data?.ath?.usd,
+            market_data?.ath_change_percentage?.usd,
+            market_data?.atl?.usd,
+            market_data?.atl_change_percentage?.usd,
             "hias",
             "asas"
           )?.map((e, i) => {
@@ -158,22 +199,18 @@ const SentimentSection: React.FC = () => {
   );
 };
 
-const AboutSection: React.FC<{ coin: string }> = ({ coin }) => {
+const AboutSection: React.FC<{ name:string,description:{en:string} }> = ({ name,description }) => {
   return (
     <div className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border">
-      <h2 className="text-xl font-semibold">About {coin}</h2>
+      <h2 className="text-xl font-semibold">About {name}</h2>
 
       <section className="flex flex-col gap-2 border-b border-[#e4e4e7] pb-2">
         <h3 className="flex items-center gap-2 text-lg font-semibold">
-          What is {coin}?
+          What is {name}?
         </h3>
 
         <p className="text-sm">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero sint
-          consequuntur eaque et, totam ut voluptatem ratione nobis aliquam
-          impedit, optio porro quaerat odit voluptates quo, eligendi
-          reprehenderit unde dolore hic nulla laborum! At, magnam voluptatibus
-          unde deleniti nulla inventore.
+          {description?.en?.split("\r\n")[0]}
         </p>
       </section>
 
@@ -213,7 +250,7 @@ const AboutSection: React.FC<{ coin: string }> = ({ coin }) => {
       </section>
 
       <section className="flex flex-col gap-2 border-b border-[#e4e4e7] pb-2">
-        <h2 className="text-xl font-semibold">Already Holding {coin}?</h2>
+        <h2 className="text-xl font-semibold">Already Holding {name}?</h2>
 
         <div className="flex items-center gap-2 w-full">
           <CheckCards
@@ -354,7 +391,7 @@ const LikeSection: React.FC<{ trendingCoinsData: trendingData[] }> = ({
 };
 
 const Currency = () => {
-  const slug = "solana";
+  const slug = "bitcoin";
 
   const { data: trendingData } = useAxios(
     "https://api.coingecko.com/api/v3/search/trending"
@@ -370,14 +407,14 @@ const Currency = () => {
         {/* Left Side Panel ----------------------------------- */}
         <div className="min-w-[72%] w-[72%] flex flex-col gap-4 box-border">
           <div className="w-full h-[80vh] mb-6">
-            <Graphs {...coinData}/>
+            {coinData && <Graphs {...coinData}/>}
           </div>
 
           {/* Other Metrics ------------------------------------- */}
           <NavigationMenu />
-          <OverViewSection />
+          <OverViewSection {...coinData}/>
           <SentimentSection />
-          <AboutSection coin="Bitcoin" />
+          <AboutSection {...coinData}/>
           <TokenomicsSection />
           <TeamSection />
         </div>
