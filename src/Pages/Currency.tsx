@@ -354,8 +354,14 @@ const LikeSection: React.FC<{ trendingCoinsData: trendingData[] }> = ({
 };
 
 const Currency = () => {
+  const slug = "solana";
+
   const { data: trendingData } = useAxios(
     "https://api.coingecko.com/api/v3/search/trending"
+  );
+
+  const { data: coinData } = useAxios(
+    `https://api.coingecko.com/api/v3/coins/${slug}`
   );
 
   return (
@@ -363,8 +369,8 @@ const Currency = () => {
       <div className="w-full px-10 box-border flex justify-between gap-3 h-max relative">
         {/* Left Side Panel ----------------------------------- */}
         <div className="min-w-[72%] w-[72%] flex flex-col gap-4 box-border">
-          <div className="w-full h-[60vh] mb-6">
-            <Graphs />
+          <div className="w-full h-[80vh] mb-6">
+            <Graphs {...coinData}/>
           </div>
 
           {/* Other Metrics ------------------------------------- */}

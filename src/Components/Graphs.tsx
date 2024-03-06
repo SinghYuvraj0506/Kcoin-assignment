@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { RiTriangleFill } from "react-icons/ri";
 
 interface ImgGraphsProps {
   symbol: string;
@@ -6,6 +7,28 @@ interface ImgGraphsProps {
   thumb: string;
   graphImg: string;
   price: string;
+}
+
+interface GraphsProps {
+  name: string;
+  symbol: string;
+  market_cap_rank: number;
+  image: {
+    thumb:string
+  }
+  market_data:{
+    current_price:{
+      usd:number,
+      inr:number
+    },
+    price_change_percentage_24h:number
+    price_change_percentage_7d:number
+    price_change_percentage_14d:number
+    price_change_percentage_30d:number
+    price_change_percentage_60d:number
+    price_change_percentage_200d:number
+    price_change_percentage_1y:number
+  }
 }
 
 export const ImgGraphs: React.FC<ImgGraphsProps> = ({
@@ -41,7 +64,9 @@ export const ImgGraphs: React.FC<ImgGraphsProps> = ({
   );
 };
 
-const Graphs: React.FC = () => {
+const Graphs: React.FC<GraphsProps> = ({
+  name,symbol,image,market_data,market_cap_rank
+}) => {
   const container = useRef();
 
   useEffect(() => {
@@ -76,10 +101,42 @@ const Graphs: React.FC = () => {
   }, []);
 
   return (
-    <div
-      className="tradingview-widget-container w-full h-full"
-      ref={container}
-    ></div>
+    <div className="w-full h-full py-3 px-5 box-border bg-white rounded-lg flex flex-col gap-5">
+      {/* Name and rank ------------- */}
+      <div className="flex items-center gap-8">
+        <div className="flex items-center gap-2">
+          <img src={image?.thumb} alt="" />
+          <h2 className="text-lg font-medium">{name}</h2>
+          <span className="text-grey-text font-semibold text-sm uppercase">{symbol}</span>
+        </div>
+
+        <span className="px-3 py-2 rounded-lg bg-[#758396] text-white text-xs">
+          Rank #{market_cap_rank}
+        </span>
+      </div>
+
+      {/* Prices and fluctuations ----------------- */}
+      <div className="flex gap-8 border-b border-[#dbdbdc] pb-4">
+        <section className="flex flex-col gap-1">
+          <h2 className="text-2xl font-medium">${market_data?.current_price?.usd}</h2>
+          <h3 className="text-xs text-grey-text">₹{market_data?.current_price?.inr}</h3>
+        </section>
+
+        <section className="flex gap-2 items-center h-max">
+          <div className="flex items-center justify-center gap-2 px-3 py-1 rounded-sm text-sm bg-light-green text-dark-green">
+            <RiTriangleFill /> {market_data?.price_change_percentage_24h?.toFixed(2)}%
+          </div>
+
+          <span className="text-xs text-grey-text">(24H)</span>
+        </section>
+      </div>
+
+      {/* Graphs integration -------------- */}
+      <div
+        className="tradingview-widget-container w-full h-full"
+        ref={container}
+      ></div>
+    </div>
   );
 };
 
