@@ -10,7 +10,10 @@ export default {
         "inter":[`"Inter", sans-serif`]
       },
       colors:{
-        "primary-blue":"#0052fe"
+        "primary-blue":"#0052fe",
+        "dark-green":"#0FBA83",
+        "light-green":"#EBF9F4",
+        "grey-text":"#768396"
       }
     },
   },
