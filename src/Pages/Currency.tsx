@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Graphs, { ImgGraphs } from "../Components/Graphs";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { RiTriangleFill } from "react-icons/ri";
@@ -15,56 +15,105 @@ import {
 } from "../Common/types/global";
 import { useAxios } from "../Common/Hooks/useAxios";
 import { TbTriangleInvertedFilled } from "react-icons/tb";
+import { useParams } from "react-router";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import Slider from "../Components/Slider";
 
-interface OverviewProps{
-  name:string,
-  market_cap_rank:number,
-  market_data:{
-    current_price:{
-      usd:number
-    },
-    ath:{
-      usd:number
-    },
-    atl:{
-      usd:number
-    },
-    ath_change_percentage:{
-      usd:number
-    },
-    atl_change_percentage:{
-      usd:number
-    },
-    ath_date:{
-      usd:string
-    },
-    atl_date:{
-      usd:string
-    },
-    market_cap:{
-      usd:number
-    },
-    total_volume:{
-      usd:number
-    },
-    market_cap_fdv_ratio:number,
-    high_24h:{
-      usd:number
-    },
-    low_24h:{
-      usd:number
-    }
-}
+interface OverviewProps {
+  name: string;
+  market_cap_rank: number;
+  market_data: {
+    current_price: {
+      usd: number;
+    };
+    ath: {
+      usd: number;
+    };
+    atl: {
+      usd: number;
+    };
+    ath_change_percentage: {
+      usd: number;
+    };
+    atl_change_percentage: {
+      usd: number;
+    };
+    ath_date: {
+      usd: string;
+    };
+    atl_date: {
+      usd: string;
+    };
+    market_cap: {
+      usd: number;
+    };
+    total_volume: {
+      usd: number;
+    };
+    market_cap_fdv_ratio: number;
+    high_24h: {
+      usd: number;
+    };
+    low_24h: {
+      usd: number;
+    };
+  };
 }
 
 const NavigationMenu: React.FC = () => {
+  const [activeNav, setActiveNav] = useState("overview");
+
+  const handleNavigation = (id: string) => {
+    const doc = document.querySelector(`#${id}`);
+    doc?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  };
+
+  //  intersection observer to observe varios id and mark on nav menu -----------
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveNav(entry.target.id);
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.5,
+      }
+    );
+
+    OtherMetricsArray?.forEach((e) => {
+      const section = document.querySelector(`#${e.metricId}`);
+      if (section) {
+        observer.observe(section);
+      }
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
-    <section className="w-full flex items-center gap-10 text-sm border-b border-[#dbdbdc]">
-      {OtherMetricsArray.map((e, i) => {
+    <section
+      className="w-full flex items-center gap-10 text-sm border-b border-[#dbdbdc] sticky top-0 z-20  bg-[#EFF2F5] py-3"
+      id="metricNav"
+    >
+      {OtherMetricsArray?.map((e, i) => {
         return (
           <span
             key={`navmenu${i}`}
-            className="cursor-pointer border-b-2 border-transparent hover:text-primary-blue text-[#4f4f4f] font-medium hover:border-b-primary-blue pb-2"
+            onClick={() => {
+              handleNavigation(e?.metricId);
+            }}
+            className={`cursor-pointer border-b-2 ${
+              activeNav === e?.metricId
+                ? "border-primary-blue text-primary-blue"
+                : "border-transparent text-[#4f4f4f]"
+            } hover:text-primary-blue font-medium hover:border-b-primary-blue pb-2`}
           >
             {e.metricName}
           </span>
@@ -74,9 +123,16 @@ const NavigationMenu: React.FC = () => {
   );
 };
 
-const OverViewSection: React.FC<OverviewProps> = ({name,market_cap_rank,market_data}) => {
+const OverViewSection: React.FC<OverviewProps> = ({
+  name,
+  market_cap_rank,
+  market_data,
+}) => {
   return (
-    <div className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border">
+    <div
+      className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border"
+      id="overview"
+    >
       <h2 className="text-xl font-semibold">Performance</h2>
 
       <div className="w-full flex flex-col items-center gap-5">
@@ -85,6 +141,11 @@ const OverViewSection: React.FC<OverviewProps> = ({name,market_cap_rank,market_d
             <span className="text-grey-text text-xs">Today's Low</span>
             <span className="text-sm">---</span>
           </div>
+
+          <section className="w-3/4">
+            <div className="bg-gradient-to-r from-orange-600 to-green-500 p-1 rounded-lg w-full"></div>
+          </section>
+
           <div className="flex flex-col gap-1 items-center">
             <span className="text-grey-text text-xs">Today's High</span>
             <span className="text-sm">---</span>
@@ -95,6 +156,11 @@ const OverViewSection: React.FC<OverviewProps> = ({name,market_cap_rank,market_d
             <span className="text-grey-text text-xs">52W Low</span>
             <span className="text-sm">---</span>
           </div>
+
+          <section className="w-3/4">
+            <div className="bg-gradient-to-r from-orange-600 to-green-500 p-1 rounded-lg w-full"></div>
+          </section>
+
           <div className="flex flex-col gap-1 items-center">
             <span className="text-grey-text text-xs">52W High</span>
             <span className="text-sm">---</span>
@@ -102,7 +168,7 @@ const OverViewSection: React.FC<OverviewProps> = ({name,market_cap_rank,market_d
         </section>
       </div>
 
-      <div className="mt-3 flex flex-col gap-3">
+      <div className="mt-3 flex flex-col gap-3" id="fundamentals">
         <h3 className="flex items-center gap-2 text-lg font-medium">
           Fundamentals <FaCircleInfo color="768396" />
         </h3>
@@ -141,6 +207,8 @@ const OverViewSection: React.FC<OverviewProps> = ({name,market_cap_rank,market_d
 };
 
 const SentimentSection: React.FC = () => {
+  const [showSlider, setShowSlider] = useState({ left: false, right: false });
+
   const [dummyEvents, setDummyEvents] = useState<NewsCardProps[]>([
     {
       headline:
@@ -162,19 +230,99 @@ const SentimentSection: React.FC = () => {
     },
   ]);
 
+  const [analysisData, setAnalysisData] = useState([
+    {
+      title: "Buy",
+      value: 76,
+      color: "bg-dark-green",
+    },
+    {
+      title: "Hold",
+      value: 8,
+      color: "bg-[#C7C8CE]",
+    },
+    {
+      title: "Sold",
+      value: 16,
+      color: "bg-[#F7324C]",
+    },
+  ]);
+
+  //  handle slider slide ---------------------------------------------
+  const handleSlide = (from: string) => {
+    const sliderDiv = document.querySelector("#newsSlider");
+    const sliderWrapper = document.querySelector("#sliderWrapper");
+
+    if (sliderDiv) {
+      if (from === "left") {
+        sliderDiv.scrollLeft -= 400;
+      } else {
+        sliderDiv.scrollLeft += 400;
+      }
+
+      if (sliderWrapper) {
+        setShowSlider({
+          left: sliderDiv.scrollLeft > 0,
+          right:
+            sliderDiv.scrollLeft <
+            sliderDiv.scrollWidth - sliderWrapper?.scrollWidth,
+        });
+      }
+    }
+  };
+
+  //  effect to hide the slide buttons -----------------
+  useEffect(() => {
+    const sliderDiv = document.querySelector("#newsSlider");
+    const sliderWrapper = document.querySelector("#sliderWrapper");
+
+    if (sliderWrapper && sliderDiv) {
+      setShowSlider({
+        left: sliderDiv.scrollLeft > 0,
+        right:
+          sliderDiv.scrollLeft <
+          sliderDiv.scrollWidth - sliderWrapper?.scrollWidth,
+      });
+    }
+  }, []);
+
   return (
-    <div className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border">
+    <div
+      className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border"
+      id="sentiments"
+    >
       <h2 className="text-xl font-semibold">Sentiment</h2>
 
-      <section className="flex flex-col gap-2">
+      <section className="flex flex-col gap-2" id="news">
         <h3 className="flex items-center gap-2 text-lg font-medium">
           Key Events <FaCircleInfo color="768396" />
         </h3>
 
-        <div className="w-full overflow-x-auto flex items-center gap-5">
-          {dummyEvents?.map((e, i) => {
-            return <NewsCards {...e} key={`news${i}`} />;
-          })}
+        <div
+          className="w-full overflow-hidden flex items-center relative"
+          id="sliderWrapper"
+        >
+
+
+          <div
+            className="w-full overflow-x-auto flex items-center gap-5 h-full scroll-smooth"
+            id="newsSlider"
+          >
+            {dummyEvents?.map((e, i) => {
+              return <NewsCards {...e} key={`news${i}`} />;
+            })}
+          </div>
+
+          {showSlider?.right && (
+            <span
+              className="absolute right-2 bg-white rounded-full p-2 text-grey-text text-xl hover:shadow-lg cursor-pointer font-medium"
+              onClick={() => {
+                handleSlide("right");
+              }}
+            >
+              <MdKeyboardArrowRight />
+            </span>
+          )}
         </div>
       </section>
 
@@ -189,9 +337,22 @@ const SentimentSection: React.FC = () => {
           </div>
 
           <div className="flex flex-col items-start gap-4 text-xs text-grey-text font-medium">
-            <section>Buy</section>
-            <section>Hold</section>
-            <section>Sold</section>
+            {analysisData?.map((e, i) => {
+              return (
+                <section
+                  className="flex items-center gap-10"
+                  key={`analysis${i}`}
+                >
+                  <span>{e?.title}</span>
+                  <div className="flex items-center gap-2">
+                    <section
+                      className={`p-1 rounded-lg ${e?.color} w-[${e?.value}px]`}
+                    ></section>
+                    <span>{e.value}%</span>
+                  </div>
+                </section>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -199,9 +360,15 @@ const SentimentSection: React.FC = () => {
   );
 };
 
-const AboutSection: React.FC<{ name:string,description:{en:string} }> = ({ name,description }) => {
+const AboutSection: React.FC<{ name: string; description: { en: string } }> = ({
+  name,
+  description,
+}) => {
   return (
-    <div className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border">
+    <div
+      className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border"
+      id="technicals"
+    >
       <h2 className="text-xl font-semibold">About {name}</h2>
 
       <section className="flex flex-col gap-2 border-b border-[#e4e4e7] pb-2">
@@ -209,9 +376,7 @@ const AboutSection: React.FC<{ name:string,description:{en:string} }> = ({ name,
           What is {name}?
         </h3>
 
-        <p className="text-sm">
-          {description?.en?.split("\r\n")[0]}
-        </p>
+        <p className="text-sm">{description?.en?.split("\r\n")[0]}</p>
       </section>
 
       <section className="flex flex-col gap-2 border-b border-[#e4e4e7] pb-2">
@@ -279,7 +444,10 @@ const AboutSection: React.FC<{ name:string,description:{en:string} }> = ({ name,
 
 const TokenomicsSection: React.FC = () => {
   return (
-    <div className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border">
+    <div
+      className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border"
+      id="tokenomics"
+    >
       <h2 className="text-xl font-semibold">Tokenomics</h2>
 
       <section className="flex flex-col gap-2 pb-2">
@@ -330,7 +498,10 @@ const TeamSection: React.FC = () => {
   ]);
 
   return (
-    <div className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border">
+    <div
+      className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border"
+      id="team"
+    >
       <h2 className="text-xl font-semibold">Team</h2>
 
       <p className="text-sm">
@@ -350,12 +521,12 @@ const TeamSection: React.FC = () => {
 const LikeSection: React.FC<{ trendingCoinsData: trendingData[] }> = ({
   trendingCoinsData,
 }) => {
+
   return (
     <div className="w-full bg-white px-10 py-8 box-border flex flex-col gap-8">
       <section className="flex flex-col gap-2">
         <h2 className="text-xl font-semibold">You May Also Like</h2>
-        <div className="flex items-center gap-5 w-full overflow-x-auto">
-          {trendingCoinsData?.map((e, i) => {
+        <Slider dataToMap={trendingCoinsData?.map((e, i) => {
             return (
               <ImgGraphs
                 graphImg={e?.item?.data?.sparkline}
@@ -363,16 +534,15 @@ const LikeSection: React.FC<{ trendingCoinsData: trendingData[] }> = ({
                 thumb={e?.item?.thumb}
                 price={e?.item?.data?.price}
                 symbol={e?.item?.symbol}
+                id={e?.item?.id}
                 key={`trendingcoinz${i}`}
               />
             );
-          })}
-        </div>
+          })}/>
       </section>
       <section className="flex flex-col gap-2">
         <h2 className="text-xl font-semibold">Trending Coins</h2>
-        <div className="flex items-center gap-5 w-full overflow-x-auto">
-          {trendingCoinsData?.map((e, i) => {
+        <Slider dataToMap={trendingCoinsData?.map((e, i) => {
             return (
               <ImgGraphs
                 graphImg={e?.item?.data?.sparkline}
@@ -380,18 +550,18 @@ const LikeSection: React.FC<{ trendingCoinsData: trendingData[] }> = ({
                 thumb={e?.item?.thumb}
                 price={e?.item?.data?.price}
                 symbol={e?.item?.symbol}
+                id={e?.item?.id}
                 key={`trendingcoinz${i}`}
               />
             );
-          })}
-        </div>
+          })}/>
       </section>
     </div>
   );
 };
 
 const Currency = () => {
-  const slug = "bitcoin";
+  const { slug } = useParams();
 
   const { data: trendingData } = useAxios(
     "https://api.coingecko.com/api/v3/search/trending"
@@ -407,14 +577,14 @@ const Currency = () => {
         {/* Left Side Panel ----------------------------------- */}
         <div className="min-w-[72%] w-[72%] flex flex-col gap-4 box-border">
           <div className="w-full h-[80vh] mb-6">
-            {coinData && <Graphs {...coinData}/>}
+            {coinData && <Graphs {...coinData} />}
           </div>
 
           {/* Other Metrics ------------------------------------- */}
           <NavigationMenu />
-          <OverViewSection {...coinData}/>
+          <OverViewSection {...coinData} />
           <SentimentSection />
-          <AboutSection {...coinData}/>
+          <AboutSection {...coinData} />
           <TokenomicsSection />
           <TeamSection />
         </div>
@@ -449,7 +619,7 @@ const Currency = () => {
                 return (
                   <div className="w-full flex items-center justify-between">
                     <span className="text-sm flex items-center gap-2">
-                    <img src={e?.item?.thumb} alt="" className="w-5"/>
+                      <img src={e?.item?.thumb} alt="" className="w-5" />
                       {e?.item?.name} ({e?.item?.symbol})
                     </span>
                     <div
@@ -462,8 +632,12 @@ const Currency = () => {
                       } flex items-center justify-center gap-2 px-3 py-1 rounded-sm text-sm`}
                     >
                       {parseInt(
-                          e?.item?.data?.price_change_percentage_24h?.usd
-                        ) > 0 ? <RiTriangleFill /> : <TbTriangleInvertedFilled />}{" "}
+                        e?.item?.data?.price_change_percentage_24h?.usd
+                      ) > 0 ? (
+                        <RiTriangleFill />
+                      ) : (
+                        <TbTriangleInvertedFilled />
+                      )}{" "}
                       {parseInt(
                         e?.item?.data?.price_change_percentage_24h?.usd
                       ).toFixed(2) + "%"}

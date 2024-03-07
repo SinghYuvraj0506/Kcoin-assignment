@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { RiTriangleFill } from "react-icons/ri";
+import { useNavigate } from "react-router";
 
 interface ImgGraphsProps {
   symbol: string;
@@ -7,6 +8,7 @@ interface ImgGraphsProps {
   thumb: string;
   graphImg: string;
   price: string;
+  id:string,
 }
 
 interface GraphsProps {
@@ -37,9 +39,12 @@ export const ImgGraphs: React.FC<ImgGraphsProps> = ({
   thumb,
   graphImg,
   price,
+  id
 }) => {
   return (
-    <div className="flex flex-col gap-2 w-[218w] min-w-[18vw] h-[130px] min-h-[130px] border border-[#E3E3E3] rounded-lg p-3 cursor-pointer hover:shadow-lg">
+    <div className="flex flex-col gap-2 w-[218w] min-w-[18vw] h-[130px] min-h-[130px] border border-[#E3E3E3] rounded-lg p-3 cursor-pointer hover:shadow-lg" onClick={()=>{
+      window.open(`/${id}`,"_self")
+    }}>
       <div className="flex items-center gap-2">
         <img src={thumb} alt="" className="w-5" />
         <span className="text-xs">{symbol}</span>
@@ -82,7 +87,7 @@ const Graphs: React.FC<GraphsProps> = ({
     script.innerHTML = `
         {
           "autosize": true,
-          "symbol": "COINBASE:${symbol?.toUpperCase()}USD",
+          "symbol": "BITSTAMP:${symbol?.toUpperCase()}USD",
           "timezone": "Etc/UTC",
           "theme": "light",
           "style": "2",

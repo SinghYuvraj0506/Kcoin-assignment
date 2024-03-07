@@ -27,7 +27,7 @@ export const OtherMetricsArray: metricObj[] = [
   },
   {
     metricName: "Tokenomics",
-    metricId: "Tokenomics",
+    metricId: "tokenomics",
   },
 ];
 

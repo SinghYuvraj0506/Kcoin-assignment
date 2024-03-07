@@ -32,6 +32,7 @@ export interface TeamCardProps {
 export interface trendingData {
   item: {
     name: string;
+    id:string;
     thumb: string;
     symbol:string;
     data: {
