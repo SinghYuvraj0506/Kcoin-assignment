@@ -16,7 +16,7 @@ import {
 import { useAxios } from "../Common/Hooks/useAxios";
 import { TbTriangleInvertedFilled } from "react-icons/tb";
 import { useParams } from "react-router";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight, MdKeyboardDoubleArrowRight } from "react-icons/md";
 import Slider from "../Components/Slider";
 
 interface OverviewProps {
@@ -99,7 +99,7 @@ const NavigationMenu: React.FC = () => {
 
   return (
     <section
-      className="w-full flex items-center gap-10 text-sm border-b border-[#dbdbdc] sticky top-0 z-20  bg-[#EFF2F5] py-3"
+      className="w-full flex items-center gap-10 text-sm border-b border-[#dbdbdc] sticky top-0 z-20  bg-[#EFF2F5] py-3 whitespace-nowrap overflow-x-auto"
       id="metricNav"
     >
       {OtherMetricsArray?.map((e, i) => {
@@ -130,50 +130,58 @@ const OverViewSection: React.FC<OverviewProps> = ({
 }) => {
   return (
     <div
-      className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border"
+      className="w-full bg-white rounded-lg flex flex-col gap-5 px-2 py-3 md:px-6 md:py-5 box-border"
       id="overview"
     >
-      <h2 className="text-xl font-semibold">Performance</h2>
+      <h2 className="text-lg md:text-xl font-semibold">Performance</h2>
 
-      <div className="w-full flex flex-col items-center gap-5">
+      <div className="w-full flex flex-col items-center gap-5 text-center">
         <section className="flex w-full items-center justify-between">
           <div className="flex flex-col gap-1 items-center">
-            <span className="text-grey-text text-xs">Today's Low</span>
+            <span className="text-grey-text text-[10px] md:text-xs">
+              Today's Low
+            </span>
             <span className="text-sm">---</span>
           </div>
 
-          <section className="w-3/4">
-            <div className="bg-gradient-to-r from-orange-600 to-green-500 p-1 rounded-lg w-full"></div>
+          <section className="w-[40%] md:w-3/4">
+            <div className="bg-gradient-to-r from-orange-600 to-green-500 p-[2px] md:p-1 rounded-lg w-full"></div>
           </section>
 
           <div className="flex flex-col gap-1 items-center">
-            <span className="text-grey-text text-xs">Today's High</span>
+            <span className="text-grey-text text-[10px] md:text-xs">
+              Today's High
+            </span>
             <span className="text-sm">---</span>
           </div>
         </section>
         <section className="flex w-full items-center justify-between">
           <div className="flex flex-col gap-1 items-center">
-            <span className="text-grey-text text-xs">52W Low</span>
+            <span className="text-grey-text text-[10px] md:text-xs">
+              52W Low
+            </span>
             <span className="text-sm">---</span>
           </div>
 
-          <section className="w-3/4">
-            <div className="bg-gradient-to-r from-orange-600 to-green-500 p-1 rounded-lg w-full"></div>
+          <section className="w-[40%] md:w-3/4">
+            <div className="bg-gradient-to-r from-orange-600 to-green-500 p-[2px] md:p-1 rounded-lg w-full"></div>
           </section>
 
           <div className="flex flex-col gap-1 items-center">
-            <span className="text-grey-text text-xs">52W High</span>
+            <span className="text-grey-text text-[10px] md:text-xs">
+              52W High
+            </span>
             <span className="text-sm">---</span>
           </div>
         </section>
       </div>
 
       <div className="mt-3 flex flex-col gap-3" id="fundamentals">
-        <h3 className="flex items-center gap-2 text-lg font-medium">
+        <h3 className="flex items-center gap-2 text-sm md:text-lg font-medium">
           Fundamentals <FaCircleInfo color="768396" />
         </h3>
 
-        <section className="w-full grid grid-cols-2 gap-x-10 gap-y-4">
+        <section className="w-full grid grid-rows-1 md:grid-cols-2 gap-x-10 gap-y-4">
           {FundamentalsArray(
             name,
             market_data?.current_price?.usd,
@@ -193,7 +201,7 @@ const OverViewSection: React.FC<OverviewProps> = ({
             "asas"
           )?.map((e, i) => {
             return (
-              <div className="w-full flex items-center justify-between border-b border-[#eff2f5] text-sm pb-2">
+              <div className="w-full flex items-center justify-between border-b border-[#eff2f5] text-xs md:text-sm pb-2">
                 <span className="text-grey-text ">{e.parameterName}</span>
 
                 <span>{e.value}</span>
@@ -207,25 +215,24 @@ const OverViewSection: React.FC<OverviewProps> = ({
 };
 
 const SentimentSection: React.FC = () => {
-  const [showSlider, setShowSlider] = useState({ left: false, right: false });
 
   const [dummyEvents, setDummyEvents] = useState<NewsCardProps[]>([
     {
       headline:
         "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloribus, quibusdam!",
-      desc: "asdasdasd",
+      desc: "dolor sit amet consectetur adipisicing elit. Doloribus, quibusdam! asdasd Lorem ipsum, dolor sit amet consectetur adipisicing tLorem ipsum, dolor sit amet consectetur adipisicing elit. Doloribus, quibusdam! asdasd Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repudiandae rem, nihil quidem reprehenderit fuga laboriosam esse harum totam, officia commodi placeat sunt. Dignis",
       type: "News",
     },
     {
       headline:
         "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloribus, quibusdam!",
-      desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloribus, quibusdam! asdasd Lorem ipsum, dolor sit amet consectetur adipisicing tibus.",
+      desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloribus, quibusdam! asdasd Lorem ipsum, dolor sit amet consectetur adipisicing tibus.Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloribus, quibusdam! asdasd Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repudiandae rem, nihil quidem reprehenderit fuga laboriosam esse harum totam, officia commodi placeat sunt. Dignis",
       type: "Trend",
     },
     {
       headline:
         "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloribus, quibusdam!",
-      desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloribus, quibusdam! asdasd Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repudiandae rem, nihil quidem reprehenderit fuga laboriosam esse harum totam, officia commodi placeat sunt. Dignissimos nihil doloribus ea molestias voluptas, id, temporibus dolore eaque similique beatae praesentium blanditiis, fugiat qui consectetur necessitatibus.l doloribus ea molestias voluptas, id, temporibus dolore eaque similique beatae praesentium blanditiis, fugiat qui consectetur necessitatibusl doloribus ea molestias voluptas, id, temporibus dolore eaque similique beatae praesentium blanditiis, fugiat qui consectetur necessitatibusl doloribus ea molestias voluptas, id, temporibus dolore eaque similique beatae praesentium blanditiis, fugiat qui consectetur necessitatibus",
+      desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloribus, quibusdam! asdasd Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repudiandae rem, nihil quidem reprehenderit fuga laboriosam esse harum totam, officia commodi placeat sunt. Dignissimos nihil doloribusctetur necessitatibusl doloribus ea molestias voluptas, id, temporibus dolore eaque similique beatae praesentium blanditiis, fugiat qui consectetur necessitatibus",
       type: "Trend",
     },
   ]);
@@ -248,90 +255,31 @@ const SentimentSection: React.FC = () => {
     },
   ]);
 
-  //  handle slider slide ---------------------------------------------
-  const handleSlide = (from: string) => {
-    const sliderDiv = document.querySelector("#newsSlider");
-    const sliderWrapper = document.querySelector("#sliderWrapper");
-
-    if (sliderDiv) {
-      if (from === "left") {
-        sliderDiv.scrollLeft -= 400;
-      } else {
-        sliderDiv.scrollLeft += 400;
-      }
-
-      if (sliderWrapper) {
-        setShowSlider({
-          left: sliderDiv.scrollLeft > 0,
-          right:
-            sliderDiv.scrollLeft <
-            sliderDiv.scrollWidth - sliderWrapper?.scrollWidth,
-        });
-      }
-    }
-  };
-
-  //  effect to hide the slide buttons -----------------
-  useEffect(() => {
-    const sliderDiv = document.querySelector("#newsSlider");
-    const sliderWrapper = document.querySelector("#sliderWrapper");
-
-    if (sliderWrapper && sliderDiv) {
-      setShowSlider({
-        left: sliderDiv.scrollLeft > 0,
-        right:
-          sliderDiv.scrollLeft <
-          sliderDiv.scrollWidth - sliderWrapper?.scrollWidth,
-      });
-    }
-  }, []);
-
   return (
     <div
-      className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border"
+      className="w-full bg-white rounded-lg flex flex-col gap-5 px-2 md:px-6 py-5 box-border"
       id="sentiments"
     >
-      <h2 className="text-xl font-semibold">Sentiment</h2>
+      <h2 className="text-lg md:text-xl font-semibold">Sentiment</h2>
 
       <section className="flex flex-col gap-2" id="news">
-        <h3 className="flex items-center gap-2 text-lg font-medium">
+        <h3 className="flex items-center gap-2 text-sm md:text-lg font-medium">
           Key Events <FaCircleInfo color="768396" />
         </h3>
 
-        <div
-          className="w-full overflow-hidden flex items-center relative"
-          id="sliderWrapper"
-        >
-
-
-          <div
-            className="w-full overflow-x-auto flex items-center gap-5 h-full scroll-smooth"
-            id="newsSlider"
-          >
-            {dummyEvents?.map((e, i) => {
-              return <NewsCards {...e} key={`news${i}`} />;
-            })}
-          </div>
-
-          {showSlider?.right && (
-            <span
-              className="absolute right-2 bg-white rounded-full p-2 text-grey-text text-xl hover:shadow-lg cursor-pointer font-medium"
-              onClick={() => {
-                handleSlide("right");
-              }}
-            >
-              <MdKeyboardArrowRight />
-            </span>
-          )}
-        </div>
+        <Slider
+          dataToMap={dummyEvents?.map((e, i) => {
+            return <NewsCards {...e} key={`news${i}`} />;
+          })}
+        />
       </section>
 
       <section className="flex flex-col gap-5">
-        <h3 className="flex items-center gap-2 text-lg font-medium">
+        <h3 className="flex items-center gap-2 text-sm md:text-lg font-medium">
           Analyst Estimates <FaCircleInfo color="768396" />
         </h3>
 
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-6 md:gap-10">
           <div className="text-2xl flex items-center justify-center rounded-full bg-light-green w-24 h-24 text-dark-green font-semibold">
             76%
           </div>
@@ -366,13 +314,13 @@ const AboutSection: React.FC<{ name: string; description: { en: string } }> = ({
 }) => {
   return (
     <div
-      className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border"
+      className="w-full bg-white rounded-lg flex flex-col gap-5 px-3 md:px-6 py-5 box-border"
       id="technicals"
     >
-      <h2 className="text-xl font-semibold">About {name}</h2>
+      <h2 className="text-lg md:text-xl font-semibold">About {name}</h2>
 
       <section className="flex flex-col gap-2 border-b border-[#e4e4e7] pb-2">
-        <h3 className="flex items-center gap-2 text-lg font-semibold">
+        <h3 className="flex items-center gap-2 text-sm md:text-lg font-semibold">
           What is {name}?
         </h3>
 
@@ -380,7 +328,7 @@ const AboutSection: React.FC<{ name: string; description: { en: string } }> = ({
       </section>
 
       <section className="flex flex-col gap-2 border-b border-[#e4e4e7] pb-2">
-        <h3 className="flex items-center gap-2 text-lg font-semibold">
+        <h3 className="flex items-center gap-2 text-sm md:text-lg font-semibold">
           Lorem ipsum dolor sit.
         </h3>
 
@@ -415,9 +363,9 @@ const AboutSection: React.FC<{ name: string; description: { en: string } }> = ({
       </section>
 
       <section className="flex flex-col gap-2 border-b border-[#e4e4e7] pb-2">
-        <h2 className="text-xl font-semibold">Already Holding {name}?</h2>
+        <h2 className="text-lg md:text-xl font-semibold">Already Holding {name}?</h2>
 
-        <div className="flex items-center gap-2 w-full">
+        <div className="flex md:flex-row flex-col items-center gap-2 w-full">
           <CheckCards
             title="Calculate your Profits"
             buttonText="Check Now"
@@ -445,13 +393,13 @@ const AboutSection: React.FC<{ name: string; description: { en: string } }> = ({
 const TokenomicsSection: React.FC = () => {
   return (
     <div
-      className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border"
+      className="w-full bg-white rounded-lg flex flex-col gap-5 px-3 md:px-6 py-5 box-border"
       id="tokenomics"
     >
-      <h2 className="text-xl font-semibold">Tokenomics</h2>
+      <h2 className="text-lg md:text-xl font-semibold">Tokenomics</h2>
 
       <section className="flex flex-col gap-2 pb-2">
-        <h3 className="flex items-center gap-2 text-lg font-semibold">
+        <h3 className="flex items-center gap-2 text-sm md:text-lg font-semibold">
           Initial Distribution
         </h3>
 
@@ -499,10 +447,10 @@ const TeamSection: React.FC = () => {
 
   return (
     <div
-      className="w-full bg-white rounded-lg flex flex-col gap-5 px-6 py-5 box-border"
+      className="w-full bg-white rounded-lg flex flex-col gap-5 px-3 md:px-6 py-5 box-border"
       id="team"
     >
-      <h2 className="text-xl font-semibold">Team</h2>
+      <h2 className="text-lg md:text-xl font-semibold">Team</h2>
 
       <p className="text-sm">
         reiciendis, molestiae a laborum mollitia. Dolores illo reiciendis
@@ -518,15 +466,15 @@ const TeamSection: React.FC = () => {
   );
 };
 
-const LikeSection: React.FC<{ trendingCoinsData: trendingData[] }> = ({
+const LikeSection: React.FC<{ trendingCoinsData: trendingData[]  }> = ({
   trendingCoinsData,
 }) => {
-
   return (
-    <div className="w-full bg-white px-10 py-8 box-border flex flex-col gap-8">
+    <div className="w-full bg-white px-3 py-3 md:px-10 md:py-8 box-border flex flex-col gap-8">
       <section className="flex flex-col gap-2">
-        <h2 className="text-xl font-semibold">You May Also Like</h2>
-        <Slider dataToMap={trendingCoinsData?.map((e, i) => {
+        <h2 className="text-lg md:text-xl font-semibold">You May Also Like</h2>
+        <Slider
+          dataToMap={trendingCoinsData?.map((e, i) => {
             return (
               <ImgGraphs
                 graphImg={e?.item?.data?.sparkline}
@@ -538,11 +486,13 @@ const LikeSection: React.FC<{ trendingCoinsData: trendingData[] }> = ({
                 key={`trendingcoinz${i}`}
               />
             );
-          })}/>
+          })}
+        />
       </section>
       <section className="flex flex-col gap-2">
-        <h2 className="text-xl font-semibold">Trending Coins</h2>
-        <Slider dataToMap={trendingCoinsData?.map((e, i) => {
+        <h2 className="text-lg md:text-xl font-semibold">Trending Coins</h2>
+        <Slider
+          dataToMap={trendingCoinsData?.map((e, i) => {
             return (
               <ImgGraphs
                 graphImg={e?.item?.data?.sparkline}
@@ -554,7 +504,8 @@ const LikeSection: React.FC<{ trendingCoinsData: trendingData[] }> = ({
                 key={`trendingcoinz${i}`}
               />
             );
-          })}/>
+          })}
+        />
       </section>
     </div>
   );
@@ -573,10 +524,13 @@ const Currency = () => {
 
   return (
     <div className="w-full pt-5 flex flex-col gap-20">
-      <div className="w-full px-10 box-border flex justify-between gap-3 h-max relative">
+      <div className="w-full px-3 md:px-10 box-border flex flex-col md:flex-row justify-between gap-3 h-max relative">
         {/* Left Side Panel ----------------------------------- */}
-        <div className="min-w-[72%] w-[72%] flex flex-col gap-4 box-border">
-          <div className="w-full h-[80vh] mb-6">
+        <div className="w-full md:min-w-[72%] md:w-[72%] flex flex-col gap-4 box-border">
+
+          <div className="text-sm flex items-center gap-1 text-[#3E5766]">Cryptocurrencies <MdKeyboardDoubleArrowRight  /> <span className="text-black">{coinData?.name}</span> </div>
+
+          <div className="w-full h-[50vh] md:h-[80vh] mb-6">
             {coinData && <Graphs {...coinData} />}
           </div>
 
@@ -587,6 +541,8 @@ const Currency = () => {
           <AboutSection {...coinData} />
           <TokenomicsSection />
           <TeamSection />
+
+          {window.screen.width < 600 &&  <LikeSection trendingCoinsData={trendingData?.coins} />}
         </div>
 
         {/* Right Side Panel ----------------------------------- */}
@@ -611,8 +567,8 @@ const Currency = () => {
           </section>
 
           {/* Trending Coins -------------------------------------- */}
-          <div className="w-full bg-white rounded-xl flex flex-col gap-5 px-5 py-5 box-border">
-            <h2 className="text-xl font-semibold">Trending Coins (24h)</h2>
+          <div className="w-full bg-white rounded-xl flex flex-col gap-5 px-2 md:px-5 py-5 box-border">
+            <h2 className="text-lg md:text-xl font-semibold">Trending Coins (24h)</h2>
 
             <section className="flex flex-col gap-5">
               {trendingData?.coins?.slice(0, 3)?.map((e: trendingData) => {
@@ -651,7 +607,7 @@ const Currency = () => {
       </div>
 
       {/* You Like Section ----------------------- */}
-      <LikeSection trendingCoinsData={trendingData?.coins} />
+     {window.screen.width > 600 && <LikeSection trendingCoinsData={trendingData?.coins} />}
     </div>
   );
 };

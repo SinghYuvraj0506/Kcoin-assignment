@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { RiTriangleFill } from "react-icons/ri";
+import { TbTriangleInvertedFilled } from "react-icons/tb";
 import { useNavigate } from "react-router";
 
 interface ImgGraphsProps {
@@ -42,14 +43,14 @@ export const ImgGraphs: React.FC<ImgGraphsProps> = ({
   id
 }) => {
   return (
-    <div className="flex flex-col gap-2 w-[218w] min-w-[18vw] h-[130px] min-h-[130px] border border-[#E3E3E3] rounded-lg p-3 cursor-pointer hover:shadow-lg" onClick={()=>{
+    <div className="flex flex-col gap-2 w-[40vw] min-w-[40vw] h-[100px] md:w-[18vw] md:min-w-[18vw] md:h-[130px] min-h-[130px] border border-[#E3E3E3] rounded-lg p-3 cursor-pointer hover:shadow-lg" onClick={()=>{
       window.open(`/${id}`,"_self")
     }}>
       <div className="flex items-center gap-2">
-        <img src={thumb} alt="" className="w-5" />
-        <span className="text-xs">{symbol}</span>
+        <img src={thumb} alt="" className="w-4 md:w-5" />
+        <span className=" text-[10px] md:text-xs">{symbol}</span>
         <span
-          className={`text-xs px-2 py-1 ${
+          className={`text-[10px] md:text-xs px-2 py-1 ${
             parseInt(percentChange) < 0
               ? "bg-light-red text-dark-red"
               : "bg-light-green text-dark-green"
@@ -59,12 +60,12 @@ export const ImgGraphs: React.FC<ImgGraphsProps> = ({
         </span>
       </div>
 
-      <span className="text-lg">
+      <span className="text-sm md:text-lg">
         {price.includes("sub title") ? "$" + price.split(`"`)[1] : price}
       </span>
 
       {/* graph image */}
-      <img src={graphImg} alt="" className="w-2/3 mx-auto relative bottom-4" />
+      <img src={graphImg} alt="" className="w-2/3 mx-auto relative bottom-0 md:bottom-4" />
     </div>
   );
 };
@@ -114,7 +115,7 @@ const Graphs: React.FC<GraphsProps> = ({
   }, [symbol]);
 
   return (
-    <div className="w-full h-full py-3 px-5 box-border bg-white rounded-lg flex flex-col gap-5">
+    <div className="w-full h-full py-3 px-3 md:px-5 box-border bg-white rounded-lg flex flex-col gap-5">
       {/* Name and rank ------------- */}
       <div className="flex items-center gap-8">
         <div className="flex items-center gap-2">
@@ -132,8 +133,8 @@ const Graphs: React.FC<GraphsProps> = ({
 
       {/* Prices and fluctuations ----------------- */}
       <div className="flex gap-8 border-b border-[#dbdbdc] pb-4">
-        <section className="flex flex-col gap-1">
-          <h2 className="text-2xl font-medium">
+        <section className="flex flex-col justify-between md:gap-1 md:justify-start w-full">
+          <h2 className="text-2xl font-bold md:font-medium">
             ${market_data?.current_price?.usd}
           </h2>
           <h3 className="text-xs text-grey-text">
@@ -142,8 +143,8 @@ const Graphs: React.FC<GraphsProps> = ({
         </section>
 
         <section className="flex gap-2 items-center h-max">
-          <div className="flex items-center justify-center gap-2 px-3 py-1 rounded-sm text-sm bg-light-green text-dark-green">
-            <RiTriangleFill />{" "}
+          <div className={`flex items-center justify-center gap-2 px-3 py-1 rounded-sm text-sm ${market_data?.price_change_percentage_24h < 0 ? "bg-light-red text-dark-red" : "bg-light-green text-dark-green" }`}>
+            {market_data?.price_change_percentage_24h > 0 ? <RiTriangleFill /> : <TbTriangleInvertedFilled />}{" "}
             {market_data?.price_change_percentage_24h?.toFixed(2)}%
           </div>
 

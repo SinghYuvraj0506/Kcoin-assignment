@@ -43,7 +43,7 @@ const Slider: React.FC<{ dataToMap: React.ReactNode[] }> = ({ dataToMap }) => {
 
   return (
     <div
-      className="w-full overflow-hidden flex items-center relative"
+      className="w-full h-full overflow-hidden flex items-center relative"
       ref={sliderWrapperRef}
     >
       {showSlider?.left && (
@@ -58,7 +58,7 @@ const Slider: React.FC<{ dataToMap: React.ReactNode[] }> = ({ dataToMap }) => {
       )}
 
       <div
-        className="w-full overflow-x-auto flex items-center gap-5 h-full scroll-smooth"
+        className="w-full overflow-x-auto flex items-center gap-3 md:gap-5 h-full scroll-smooth"
         ref={sliderRef}
       >
         {dataToMap?.map((e) => {
