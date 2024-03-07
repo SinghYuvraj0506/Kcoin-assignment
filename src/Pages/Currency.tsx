@@ -523,7 +523,7 @@ const Currency = () => {
   );
 
   return (
-    <div className="w-full pt-5 flex flex-col gap-20">
+    <div className="w-full pt-5 flex flex-col gap-20 currency-wrapper">
       <div className="w-full px-3 md:px-10 box-border flex flex-col md:flex-row justify-between gap-3 h-max relative">
         {/* Left Side Panel ----------------------------------- */}
         <div className="w-full md:min-w-[72%] md:w-[72%] flex flex-col gap-4 box-border">
